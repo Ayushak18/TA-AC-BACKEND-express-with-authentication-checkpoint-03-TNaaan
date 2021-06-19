@@ -12,7 +12,7 @@ passport.use(
     (accessToken, refreshToken, profile, done) => {
       let githubUser = {
         name: profile.displayName,
-        username: profile.username,
+        username: profile._json.username,
         email: profile._json.email,
         photo: profile._json.avatar_url,
       };

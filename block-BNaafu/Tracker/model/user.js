@@ -9,6 +9,7 @@ let userSchema = new Schema({
   age: Number,
   phoneNumber: Number,
   country: String,
+  isVerified: { type: Boolean, default: false },
 });
 
 userSchema.pre('save', function (next) {
