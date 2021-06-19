@@ -39,9 +39,13 @@ router.post('/login', (req, res, next) => {
               next(error);
             } else {
               if (result) {
-                req.session.userId = user.id;
-                console.log(req.session, result);
-                res.send('User Logged In');
+                if (user.isVerified) {
+                  req.session.userId = user.id;
+                  // console.log(req.session, result, user.isVerified);
+                  res.send('User Logged In');
+                } else {
+                  res.send('Please verify your email before login');
+                }
               } else {
                 res.send('Password Incorrect');
               }
@@ -58,7 +62,7 @@ router.post('/login', (req, res, next) => {
 });
 
 router.get('/failure', (req, res) => {
-  res.send('Fialed');
+  res.send('Failed');
 });
 
 router.get('/auth/github', passport.authenticate('github'));
@@ -73,7 +77,7 @@ router.get(
 
 router.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['profile'] })
+  passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 
 router.get(
