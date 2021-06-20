@@ -39,10 +39,10 @@ router.post('/login', (req, res, next) => {
               next(error);
             } else {
               if (result) {
-                if (user.isVerified) {
+                if (!user.isVerified) {
                   req.session.userId = user.id;
                   // console.log(req.session, result, user.isVerified);
-                  res.send('User Logged In');
+                  res.render('dashboard');
                 } else {
                   res.send('Please verify your email before login');
                 }
@@ -59,6 +59,10 @@ router.post('/login', (req, res, next) => {
   } else {
     res.send('email or password is not present');
   }
+});
+
+router.get('/resetPassword', (req, res) => {
+  res.render('resetPassword');
 });
 
 router.get('/failure', (req, res) => {
