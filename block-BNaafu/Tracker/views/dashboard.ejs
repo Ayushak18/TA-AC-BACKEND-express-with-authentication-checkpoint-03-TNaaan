@@ -10,6 +10,7 @@
     <h1>Dashboard</h1>
     <a href="/income">Add Income</a>
     <a href="/expense">Add Expenses</a>
+    <a href="/logout">LogOut</a>
     <div class="income">
       <h2>Income</h2>
       <% income.forEach((incomeRecord,index)=>{ %>
@@ -26,19 +27,14 @@
     </div>
     <div class="savings">
       <h2>Savings</h2>
-      <%let incomeSum = income.reduce((acc,cv)=>{ %> 
-        <% acc = acc +cv.amount %> 
-        <% return acc %> 
-      <% },0) %>
-      
+      <%let incomeSum = income.reduce((acc,cv)=>{ %> <% acc = acc +cv.amount %>
+      <% return acc %> <% },0) %> <%let expenseSum = expense.reduce((acc,cv)=>{
+      %> <% acc = acc +cv.amount %> <% return acc %> <% },0) %>
 
-      <%let expenseSum = expense.reduce((acc,cv)=>{ %> 
-        <% acc = acc +cv.amount %> 
-        <% return acc %> 
-      <% },0) %>
-      
-      <h4>Total Income(<%= incomeSum %>) - Total Expenses(<%= expenseSum %>)  
-       = Total Savings (<%= incomeSum-expenseSum %>)</h4>
+      <h4>
+        Total Income(<%= incomeSum %>) - Total Expenses(<%= expenseSum %>) =
+        Total Savings (<%= incomeSum-expenseSum %>)
+      </h4>
     </div>
   </body>
 </html>

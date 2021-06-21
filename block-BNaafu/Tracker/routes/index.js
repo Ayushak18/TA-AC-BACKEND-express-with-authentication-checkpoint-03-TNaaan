@@ -4,6 +4,7 @@ let User = require('../model/user');
 let Income = require('../model/income');
 let Expense = require('../model/expense');
 let passport = require('passport');
+let auth = require('../middleware/auth');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -26,22 +27,6 @@ router.post('/register', (req, res, next) => {
 
 router.get('/login', (req, res) => {
   res.render('loginUser');
-});
-
-router.get('/dashboard', (req, res, next) => {
-  Income.find({}, (error, income) => {
-    if (error) {
-      next(error);
-    } else {
-      Expense.find({}, (error, expense) => {
-        if (error) {
-          next(error);
-        } else {
-          res.render('dashboard', { income: income, expense: expense });
-        }
-      });
-    }
-  });
 });
 
 router.post('/login', (req, res, next) => {
@@ -110,12 +95,36 @@ router.get(
   }
 );
 
+router.get('/logout', (req, res, next) => {
+  req.session.destroy();
+  res.clearCookie('connect-sid');
+  res.redirect('/login');
+});
+
+router.use(auth.loggedInUser);
+
+router.get('/dashboard', (req, res, next) => {
+  Income.find({}, (error, income) => {
+    if (error) {
+      next(error);
+    } else {
+      Expense.find({}, (error, expense) => {
+        if (error) {
+          next(error);
+        } else {
+          res.render('dashboard', { income: income, expense: expense });
+        }
+      });
+    }
+  });
+});
+
 router.get('/income', (req, res) => {
   res.render('income');
 });
 
 router.post('/income', (req, res) => {
-  let userId = req.session.userId;
+  let userId = req.session.userId || req.session.passport.user;
   req.body.userId = userId;
   Income.create(req.body, (error, income) => {
     if (error) {
@@ -131,7 +140,7 @@ router.get('/expense', (req, res, next) => {
 });
 
 router.post('/expense', (req, res, next) => {
-  let userId = req.session.userId;
+  let userId = eq.session.userId || req.session.passport.user;
   req.body.userId = userId;
   Expense.create(req.body, (error, expense) => {
     if (error) {
