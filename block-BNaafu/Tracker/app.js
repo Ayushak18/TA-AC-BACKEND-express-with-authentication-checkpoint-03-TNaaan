@@ -7,6 +7,7 @@ let mongoose = require('mongoose');
 let session = require('express-session');
 let MongoStore = require('connect-mongo');
 let passport = require('passport');
+let auth = require('./middleware/auth');
 
 require('dotenv').config();
 require('./modules/github');

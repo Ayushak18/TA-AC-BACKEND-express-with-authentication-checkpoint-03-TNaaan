@@ -5,13 +5,13 @@ let expenseSchema = new Schema(
   {
     category: String,
     amount: Number,
-    date: Date.now,
+    date: Date,
     user: {
       type: Schema.Types.ObjectId,
       ref: 'user',
     },
   },
-  { timestamps }
+  // { timestamps }
 );
 
 let Expense = mongoose.model('expense', expenseSchema);
